@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">                 
   <title>Lab 9</title>
 
   <style>
@@ -69,23 +69,33 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="log">Console Log</button>
+      <button id="error">Console Error</button>
+      <button id="count">Console Count</button>
+      <button id="warn">Console Warn</button>
+      <button id="assert">Console Assert</button>
+      <button id="clear">Console Clear</button>
+      <button id="dir">Console Dir</button>
+      <button id="dirxml">Console dirxml</button>
+      <button id="group-start">Console Group Start</button>
+      <button id="group-end">Console Group End</button>
+      <button id="table">Console Table</button>
+      <button id="start-time">Start Timer</button>
+      <button id="end-time">End Timer</button>
+      <button id="trace">Console Trace</button>
+      <button id="global-error">Trigger a Global Error</button>
     </section>
   </main>
+
+
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "3f8bbd4e7a63404c8386c77fed3ca8a3"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+       
 
   <script>
     let form = document.querySelector('form');
@@ -102,6 +112,125 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    errorBtns[0].addEventListener('click', function(){
+      console.log('Console Log Buttom Pressed');
+    })
+
+    errorBtns[1].addEventListener('click', function(){
+      console.error('There are some errors');
+    })
+
+    errorBtns[2].addEventListener('click', function(){
+      console.count();
+    })
+
+    errorBtns[3].addEventListener('click', function(){
+      console.warn('Warning! Warning!');
+    })
+
+    errorBtns[4].addEventListener('click', function(){
+      const x = 2;
+      const y = 7;
+      const reason = 'x expected to be greater than y'
+      console.assert(x > y, reason);
+    })
+
+    errorBtns[5].addEventListener('click', function(){
+      console.clear();
+    })
+
+    errorBtns[6].addEventListener('click', function(){
+      console.dir(document.getElementById('operator')[0]);
+    })
+
+    errorBtns[7].addEventListener('click', function(){
+      console.dirxml(document);
+    })
+
+    errorBtns[8].addEventListener('click', function(){
+      console.group('Group Here');
+    })
+
+    errorBtns[9].addEventListener('click', function(){
+      console.groupEnd('Group Here');
+    })
+
+    const err = [
+        {
+          error: '1',
+          warning: '11'
+        },
+        {
+          error: '2',
+          warning: '22'
+        },
+        {
+          error: '3',
+          warning: '33'
+        }
+      ];
+
+    errorBtns[10].addEventListener('click', function(){
+      console.table(err);
+    })
+
+    errorBtns[11].addEventListener('click', function(){
+      console.time();
+    })
+
+    errorBtns[12].addEventListener('click', function(){
+      console.timeEnd();
+    })
+
+    errorBtns[13].addEventListener('click', function(){
+      console.trace();
+    })
+
+    try {
+      not-element.innerHTML == 'err';
+    } catch (error) {
+      alert('not an valid element');
+    }
+
+    let j = 1;
+    let k = 2;
+    try {
+      if (j != k) {
+        throw new Error("not same value")
+      }
+    } catch (error) {
+      alert(error.message);
+      k = 1
+    } finally {
+      alert( 'same value' );
+    }
+
+    class DumbError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "DumbError";
+      }
+    }
+
+    try {
+      throw new DumbError("Aha!");
+    } catch(err) {
+      alert(err.stack); 
+    }
+
+    document.registerErrorHandler = function () {    
+      if (window.onerror) // then one exists
+        {
+         var oldError = window.onerror;
+         var newErrorHandler = function (errorMessage,url,lineNumber) {document.reportJSError(errorMessage,url,lineNumber); oldError(errorMessage,url,lineNumber); }
+         window.onerror = newErrorHandler;
+        }
+      else
+        window.onerror = document.reportJSError;
+    }
+
+    document.registerErrorHandler();
   </script>
 </body>
 
